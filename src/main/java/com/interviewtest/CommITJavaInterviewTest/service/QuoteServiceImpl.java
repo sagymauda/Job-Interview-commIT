@@ -48,9 +48,9 @@ public class QuoteServiceImpl implements QuoteService {
             logger.error(ErrorMessageType.ILLIGAL.toJson());
             return;
         }
+
         quoteRepo.save(quote);
         QuoteLog quoteLog = new QuoteLog(new Date(),quote.getId(), Operation.CREATE,0,"The Quote Has Been Saved");
-
         quoteLogService.Create(quoteLog);
 
     }
@@ -75,6 +75,8 @@ public class QuoteServiceImpl implements QuoteService {
             exsistQuote.setPrice(quote.getPrice());
             exsistQuote.setItemsList(quote.getItemsList());
             quoteRepo.save(exsistQuote);
+            QuoteLog quoteLog = new QuoteLog(new Date(),id, Operation.UPDATE,0,"The Quote Has Been Updated");
+            quoteLogService.Create(quoteLog);
         }
     }
 
