@@ -33,11 +33,11 @@ public class QuoteServiceImpl implements QuoteSerive {
 
     @Override
     public void createQoute(Quote quote) {
-        if(!isValidName(quote)){
+        if (!isValidName(quote)) {
             logger.error(ErrorMessageType.NULL_INPUT.toJson());
             return;
         }
-        if(!isValidPrice(quote)){
+        if (!isValidPrice(quote)) {
             logger.error(ErrorMessageType.ILLIGAL.toJson());
             return;
         }
@@ -47,11 +47,11 @@ public class QuoteServiceImpl implements QuoteSerive {
     @Override
     public void updateQoute(Long id, Quote quote) {
         Optional<Quote> quote1 = quoteRepo.findById(id);
-        if(!isValidName(quote)){
+        if (!isValidName(quote)) {
             logger.error(ErrorMessageType.NULL_INPUT.toJson());
             return;
         }
-        if(!isValidPrice(quote)){
+        if (!isValidPrice(quote)) {
             logger.error(ErrorMessageType.ILLIGAL.toJson());
             return;
         }
@@ -64,22 +64,22 @@ public class QuoteServiceImpl implements QuoteSerive {
 
     @Override
     public void deleteSoftQoute(Long id) {
-        List<Quote> quoteList = quoteRepo.findAll();
-        for (Quote quote : quoteList) {
-            if (quote.getId() == id) {
-                quoteRepo.deleteById(id);
-            }
-              break;
-            }
+        Optional<Quote> quote = quoteRepo.findById(id);
 
+        if (quote.isPresent()) {
+            Quote quote1 = quote.get();
+            quote1.
+
+            quoteRepo.deleteById(id);
         }
+    }
 
     private boolean isValidName(Quote quote) {
-        return (quote.getName()!=null);
+        return (quote.getName() != null);
     }
 
     private boolean isValidPrice(Quote quote) {
-        return (quote.getPrice()!=null && quote.getPrice()>0);
+        return (quote.getPrice() != null && quote.getPrice() > 0);
     }
 
 }
