@@ -13,9 +13,9 @@ public interface QuoteSerive {
 
     public void createQoute(Quote quote);
 
-    public void updateQoute(Quote quote);
+    public void  updateQoute(Long id ,Quote quote);
 
-    public void deleteSoftQoute(Quote  quote);
+    public void deleteSoftQoute(Long id);
 
 
 

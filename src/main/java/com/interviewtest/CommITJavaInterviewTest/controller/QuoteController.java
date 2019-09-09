@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/quote")
-public class QuoatController {
+public class QuoteController {
 
 
     @Autowired
@@ -20,11 +20,12 @@ public class QuoatController {
     @GetMapping("/all")
     public List<Quote> getAllQuoats(){
         List<Quote>quotes = quoteService.getAllQuots();
+        System.out.println(quotes.size());
         return quotes;
     }
 
     @GetMapping("/{id}")
-    public Optional<Quote> getQuoatById(Long id){
+    public Optional<Quote> getQuoatById(@PathVariable(value="id") Long id){
         Optional<Quote> quote = quoteService.getQuote(id);
         return quote;
 
@@ -37,11 +38,16 @@ public class QuoatController {
 
     }
 
-  @PostMapping("/delete")
+  @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void softDeleteQuote( @RequestBody Quote quote){
-        quoteService.deleteSoftQoute(quote);
+    public void softDeleteQuote(@PathVariable(value="id") Long id){
+        quoteService.deleteSoftQoute(id);
 
+    }
+
+    @PostMapping("/update/{id}")
+    public void updateQoute(@PathVariable(value="id") Long id,@RequestBody Quote quote){
+        quoteService.updateQoute(id,quote);
     }
 
 

@@ -1,5 +1,7 @@
 package com.interviewtest.CommITJavaInterviewTest.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,6 +16,7 @@ public class Item {
     private String name;
 
     @ManyToOne
+    @JsonIgnore
     private Quote quote;
 
     public void setId(Long id) {

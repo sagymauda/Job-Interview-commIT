@@ -2,6 +2,7 @@ package com.interviewtest.CommITJavaInterviewTest;
 
 import com.interviewtest.CommITJavaInterviewTest.model.Item;
 import com.interviewtest.CommITJavaInterviewTest.model.Quote;
+import com.interviewtest.CommITJavaInterviewTest.repository.ItemRepo;
 import com.interviewtest.CommITJavaInterviewTest.repository.QuoteRepo;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,12 +20,13 @@ public class CommItJavaInterviewTestApplication {
 		SpringApplication.run(CommItJavaInterviewTestApplication.class, args);
 	}
 		@Bean
-		public CommandLineRunner demo (QuoteRepo quoteRepo ) {
+		public CommandLineRunner demo (QuoteRepo quoteRepo, ItemRepo itemRepo) {
 			return (args) -> {
 				Item book =  new Item("book");
 				Item pen =  new Item("pen");
 				Item fork =  new Item("fork");
 				Item sunGlasses =  new Item("sunGlasses");
+
 
 				List<Item> itemsListOfQoute1 = new ArrayList<>();
 				List<Item> itemsListOfQoute2 = new ArrayList<>();
@@ -35,7 +37,11 @@ public class CommItJavaInterviewTestApplication {
 				itemsListOfQoute2.add(sunGlasses);
 
 				Quote quote1 = new Quote("deal1",30,itemsListOfQoute1);
+				book.setQuote(quote1);
+				pen.setQuote(quote1);
 				Quote quote2 = new Quote("deal2",20,itemsListOfQoute2);
+				fork.setQuote(quote2);
+				sunGlasses.setQuote(quote2);
 				quoteRepo.save(quote1);
 				quoteRepo.save(quote2);
 
