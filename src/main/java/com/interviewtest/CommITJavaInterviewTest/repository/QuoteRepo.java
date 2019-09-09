@@ -9,6 +9,7 @@ import java.util.List;
 @Repository
 public interface QuoteRepo extends CrudRepository<Quote,Long> {
       List<Quote> findAll();
+      List<Quote> findAllByIsDeletedFalse();
 
 
 

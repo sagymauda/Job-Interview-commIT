@@ -18,8 +18,8 @@ public class QuoteController {
     private QuoteServiceImpl quoteService;
 
     @GetMapping("/all")
-    public List<Quote> getAllQuoats(){
-        List<Quote>quotes = quoteService.getAllQuots();
+    public List<Quote> getAllQuotes(){
+        List<Quote>quotes = quoteService.getAllQuotes();
         System.out.println(quotes.size());
         return quotes;
     }
@@ -34,20 +34,20 @@ public class QuoteController {
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.OK)
     public void createQuote(@RequestBody Quote quote){
-        quoteService.createQoute(quote);
+        quoteService.createQuote(quote);
 
     }
 
   @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void softDeleteQuote(@PathVariable(value="id") Long id){
-        quoteService.deleteSoftQoute(id);
+        quoteService.deleteSoftQuote(id);
 
     }
 
     @PostMapping("/update/{id}")
     public void updateQoute(@PathVariable(value="id") Long id,@RequestBody Quote quote){
-        quoteService.updateQoute(id,quote);
+        quoteService.updateQuote(id,quote);
     }
 
 

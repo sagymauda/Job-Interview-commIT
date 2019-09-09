@@ -2,7 +2,9 @@ package com.interviewtest.CommITJavaInterviewTest.service;
 
 
 import com.interviewtest.CommITJavaInterviewTest.model.ErrorMessageType;
+import com.interviewtest.CommITJavaInterviewTest.model.Operation;
 import com.interviewtest.CommITJavaInterviewTest.model.Quote;
+import com.interviewtest.CommITJavaInterviewTest.model.QuoteLog;
 import com.interviewtest.CommITJavaInterviewTest.repository.QuoteRepo;
 
 import org.slf4j.Logger;
@@ -10,20 +12,25 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class QuoteServiceImpl implements QuoteSerive {
+public class QuoteServiceImpl implements QuoteService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private QuoteLogService quoteLogService;
+
 
     @Autowired
     private QuoteRepo quoteRepo;
 
     @Override
-    public List<Quote> getAllQuots() {
-        return quoteRepo.findAll();
+    public List<Quote> getAllQuotes() {
+        return quoteRepo.findAllByIsDeletedFalse();
     }
 
     @Override
@@ -32,7 +39,7 @@ public class QuoteServiceImpl implements QuoteSerive {
     }
 
     @Override
-    public void createQoute(Quote quote) {
+    public void createQuote(Quote quote) {
         if (!isValidName(quote)) {
             logger.error(ErrorMessageType.NULL_INPUT.toJson());
             return;
@@ -42,35 +49,48 @@ public class QuoteServiceImpl implements QuoteSerive {
             return;
         }
         quoteRepo.save(quote);
+        QuoteLog quoteLog = new QuoteLog(new Date(),quote.getId(), Operation.CREATE,0,"The Quote Has Been Saved");
+
+        quoteLogService.Create(quoteLog);
+
     }
 
     @Override
-    public void updateQoute(Long id, Quote quote) {
-        Optional<Quote> quote1 = quoteRepo.findById(id);
-        if (!isValidName(quote)) {
-            logger.error(ErrorMessageType.NULL_INPUT.toJson());
-            return;
+    public void updateQuote(Long id, Quote quote) {
+        Optional<Quote> optionalQuote = quoteRepo.findById(id);
+
+        if (optionalQuote.isPresent()) {
+            Quote exsistQuote = optionalQuote.get();
+
+            if (!isValidName(quote)) {
+                logger.error(ErrorMessageType.NULL_INPUT.toJson());
+                return;
+            }
+            if (!isValidPrice(quote)) {
+                logger.error(ErrorMessageType.ILLIGAL.toJson());
+                return;
+            }
+
+            exsistQuote.setName(quote.getName());
+            exsistQuote.setPrice(quote.getPrice());
+            exsistQuote.setItemsList(quote.getItemsList());
+            quoteRepo.save(exsistQuote);
         }
-        if (!isValidPrice(quote)) {
-            logger.error(ErrorMessageType.ILLIGAL.toJson());
-            return;
-        }
-        quote1.get().setName(quote.getName());
-        quote1.get().setPrice(quote.getPrice());
-        quote1.get().setItemsList(quote.getItemsList());
-        quoteRepo.save(quote1.get());
     }
 
 
     @Override
-    public void deleteSoftQoute(Long id) {
-        Optional<Quote> quote = quoteRepo.findById(id);
+    public void deleteSoftQuote(Long id) {
+        Optional<Quote> optionalQuote = quoteRepo.findById(id);
 
-        if (quote.isPresent()) {
-            Quote quote1 = quote.get();
-            quote1.
+        if (optionalQuote.isPresent()) {
+            Quote exsistQuote = optionalQuote.get();
+            exsistQuote.setIsDeleted(true);
 
-            quoteRepo.deleteById(id);
+            quoteRepo.save(exsistQuote);
+
+            QuoteLog quoteLog = new QuoteLog(new Date(),id, Operation.DELETE,0,"The Quote Has Been SOFT Deleted");
+            quoteLogService.Create(quoteLog);
         }
     }
 

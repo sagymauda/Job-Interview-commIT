@@ -1,10 +1,9 @@
 package com.interviewtest.CommITJavaInterviewTest.repository;
 
-import com.interviewtest.CommITJavaInterviewTest.model.Item;
+import com.interviewtest.CommITJavaInterviewTest.model.QuoteLog;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ItemRepo extends CrudRepository<Item,Long> {
-
+public interface QuoteLogRepo extends CrudRepository<QuoteLog,Long> {
 }
